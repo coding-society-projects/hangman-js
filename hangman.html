@@ -1,0 +1,61 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Hangman</title>
+</head>
+<body>
+    <h1>Hangman</h1>
+
+    <div id="secret" style="letter-spacing: 1px;"></div>
+    <div><input type="text" id="feedback"> <button onclick="check()">Check</button></div>
+    <div id="correct"></div>
+    <div id="wrong"></div>
+    <div id="message"></div>
+    <div><button onclick="getWord()">Play Again</button></div>
+
+    <script>
+        var word = ''
+        var secret = ''
+        var correct = []
+        var wrong = []
+
+        function getWord() {
+            fetch('https://random-word-api.herokuapp.com/word?number=1')
+            .then(response => response.json())
+            .then(data => {
+                word = data[0]
+                secret = word[0] + "_".repeat(word.length-2) + word[word.length-1]
+                console.log(word)
+                document.getElementById("secret").innerHTML = secret
+            })
+        }
+
+        function check() {
+            const letter = document.getElementById("feedback").value 
+            if(word.includes(letter)) {
+                for(let i = 1; i < word.length-1; i++) {
+                    if(word[i] == letter) {
+                        secret = secret.substring(0,i) + letter + secret.substring(i+1)
+                        console.log("Adding letter " + letter + " " + i + ": " + secret)
+                    } 
+                }
+                if(word == secret) {
+                    document.getElementById("message").innerHTML = "Congratulations!"
+                }
+                document.getElementById("secret").innerHTML = secret
+                correct.push(letter)
+            }
+            else {
+                wrong.push(letter)
+                if(wrong.length == 6) {
+                    document.getElementById("message").innerHTML = "You are hanged ..."
+                }
+            }
+        }
+    </script>
+    
+</body>
+</html>
