@@ -11,3 +11,4 @@
 
 1. Add canvas to draw the hgangman
 1. Replace the textfield with buttons for each letter. When a button is clicke it should be deactivated.
+1. Apply Bootstrap to make it good looking
